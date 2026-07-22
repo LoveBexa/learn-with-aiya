@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AIYA✦ — Learn to Build with AI Beyond the Prompt</title>
+<meta name="description" content="Hands-on, beginner-friendly AI workshops in London helping curious professionals build real things with AI beyond the prompt." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Archivo:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script>
+  document.documentElement.classList.add('is-loading');
+  try {
+    if (localStorage.getItem('aiya-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<div id="loader">
+  <div class="big">
+    <span>A</span><span>I</span><span>Y</span><span>A</span><span class="bang">!</span>
+  </div>
+  <div class="pct">000</div>
+</div>
+
+<canvas id="gl"></canvas>
+
+<header>
+  <a href="#hero" class="logo">AIYA✦</a>
+  <nav>
+    <a class="navlink mono" href="#work-wrap">Workshops</a>
+    <a class="navlink mono" href="#room">About</a>
+    <a class="navlink mono" href="#footer">Contact</a>
+    <button id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle-label">Dark</span>
+    </button>
+  </nav>
+</header>
+
+<div class="hud left mono" id="clock">--:--</div>
+<div class="hud right mono">LONDON, UK<br>51.51°N / 0.13°W</div>
+
+<main>
+
+  <section id="hero">
+    <div class="hero-eyebrow rv">
+      <div class="dot"></div>
+      <div class="mono">Now enrolling — Autumn cohorts ’26</div>
+    </div>
+    <h1 class="hero-title" aria-label="AIYA!">
+      <span class="l"><span>A</span></span><span class="l"><span>I</span></span><span class="l"><span>Y</span></span><span class="l"><span>A</span></span><span class="l bang"><span>!</span></span>
+    </h1>
+    <div class="hero-sub">
+      <div class="tag rv">Hands-on beginner Gen AI workshops for people who want to <em>build with AI</em>, taught in a real classroom with <em>real humans</em>.</div>
+            <div class="scrollcue rv">
+        <span class="mono dim">Scroll</span>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="work-wrap">
+    <div id="work-head">
+      <h2 class="sec-title rv">The<br>Workshops</h2>
+      <div class="mono dim rv">04 levels — small cohorts — zero code required</div>
+    </div>
+    <div id="hpin">
+      <nav class="work-nav" id="work-nav" aria-label="Browse workshops">
+        <button type="button" class="work-nav-btn" id="workPrev" aria-label="Previous workshop" disabled>
+          <span aria-hidden="true">←</span>
+        </button>
+        <span class="work-nav-count mono" id="workCount" aria-live="polite">01 / 04</span>
+        <button type="button" class="work-nav-btn" id="workNext" aria-label="Next workshop">
+          <span aria-hidden="true">→</span>
+        </button>
+      </nav>
+      <div class="htrack" id="htrack">
+        <article class="wcard">
+          <div class="fill"></div>
+          <div class="top">
+            <div>
+              <div class="num">L/01</div>
+              <h3>Beyond the Prompt</h3>
+              <p>Discover what AI can really do once you stop treating it like a search box. Explore <span class="hl">creative, practical and unexpected</span> ways to use AI beyond the chat window.</p>            </div>
+          </div>
+          <div class="meta">
+            <span class="mono">foundation · in person</span>
+            <span class="mono dim">No experience needed</span>
+          </div>
+          <div class="arrow">→</div>
+        </article>
+        <article class="wcard">
+          <div class="fill"></div>
+          <div class="top">
+            <div>
+              <div class="num">L/02</div>
+              <h3>Build Your First Website</h3>
+              <p>Design and ship a beautiful AI-powered website with a link you can send to people without writing a line of code.</p>            </div>
+          </div>
+          <div class="meta">
+            <span class="mono">designer · in person</span>
+            <span class="mono dim">Bring a laptop &amp; an idea</span>
+          </div>
+          <div class="arrow">→</div>
+        </article>
+
+
+        <article class="wcard">
+          <div class="fill"></div>
+          <div class="top">
+            <div>
+              <div class="num">L/03</div>
+              <h3>AI for Business</h3>
+    <p>Wire AI into your everyday work. Connect it to the tools you already use, build smarter workflows and discover innovative ways to automate manual tasks.</p>
+            </div>
+          </div>
+          <div class="meta">
+            <span class="mono">automation · in person</span>
+            <span class="mono dim">For busy professionals</span>
+          </div>
+          <div class="arrow">→</div>
+        </article>
+
+        <article class="wcard">
+          <div class="fill"></div>
+          <div class="top">
+            <div>
+              <div class="num">L/04</div>
+              <h3>Ship An App in One Weekend</h3>
+              <p>Two days. One project. Learn by building from start to finish, leaving with a working project and the confidence to build your next one.</p>            </div>
+          </div>
+          <div class="meta">
+            <span class="mono">builder · in person</span>
+            <span class="mono dim">For budding creators</span>
+          </div>
+          <div class="arrow">→</div>
+        </article>
+
+
+      </div>
+    </div>
+  </div>
+
+  <section id="manifesto">
+    <div class="manifesto-inner">
+      <!-- <div class="def rv">
+        <div class="mono dim">/ˈaɪ.jɑː/ · exclamation</div>
+        <div class="word">aiya <span class="han">哎呀</span> — common Chinese interjection. It is used to express a wide range of intense emotions, including surprise, frustration, disappointment, pain, or exasperation.</div>
+      </div> -->
+      <p class="manifesto-text" id="mtext">
+        AIYA runs beginner-friendly workshops in <span class="hl">London</span> where founders, freelancers and curious professionals learn practical <span class="hl">Gen AI skills</span> by building real projects <span class="hl">together</span>.
+        <!-- <span class="manifesto-voice">Learn how to <span class="hl">automate work</span>, create AI assistants, <span class="hl">build websites</span> and launch <span class="hl">apps</span> with help every step of the way <span class="manifesto-emoji" aria-hidden="true">✌️</span>.</span> -->
+      </p>
+    </div>
+  </section>
+
+  <section id="room">
+    <div class="sticky">
+      <div class="mono dim rv">Why a classroom?</div>
+      <h2 class="sec-title rv">The best way<br>to learn Gen AI?<br><em>Together</em>👯🤝🛠️🚀</h2>    </div>
+  
+    <div class="points">
+      <div class="point rv">
+        <div class="mono dim">R/01</div>
+        <h4>Real people. Real help.</h4>
+        <p>AIYA is built for busy people. When you're stuck, someone walks over, answers your question and gets you moving again... no endless tutorials or Youtube rabbit holes.</p>
+      </div>
+  
+      <div class="point rv">
+        <div class="mono dim">R/02</div>
+        <h4>Small groups. Shared learning.</h4>
+        <p>Twelve seats per workshop. Build alongside other beginners, share ideas, ask questions and learn together in a collaborative environment.</p>
+      </div>
+  
+      <div class="point rv">
+        <div class="mono dim">R/03</div>
+        <h4>Build something useful.</h4>
+        <p>Every workshop ends with something you've actually made: a website, AI assistant or workflow you can keep using. No theory without practice.</p>
+      </div>
+  
+      <div class="point rv">
+        <div class="mono dim">R/04</div>
+        <h4>Everyone starts somewhere.</h4>
+        <p>Whether you're a founder, consultant, teacher or simply AI curious, you belong here. AIYA exists to help people build confidence with AI and not feel left behind.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="marquee" aria-hidden="true">
+    <div class="mq" id="mq">
+      <span>learn with aiya</span><span>beyond the prompt</span><span>turn ideas into reality</span><span>build together/span><span>learn with aiya</span><span>learn with aiya</span>
+    </div>
+  </div>
+
+  <section id="footer">
+    <div>
+      <div class="mono dim rv">Ready when you are</div>
+      <h2 class="cta-title rv">Say<br>AIYA<span class="bang">!</span></h2>
+      <a class="magnet rv" href="mailto:bexa@learnwithaiya.com"><span>bexa@learnwithaiya.com</span><span>→</span></a>
+    </div>
+    <div class="foot-grid">
+      <div class="mono dim">AIYA✦ 2026 — learnwithaiya.com</div>
+      <!-- <div class="links">
+        <a class="mono" href="#">Instagram</a>
+        <a class="mono" href="#">LinkedIn</a>
+        <a class="mono" href="#">Newsletter</a>
+      </div> -->
+      <div class="mono dim">Beyond the prompt.</div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
