@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Track — AIYA✦ Classes</title>
+<meta name="description" content="Browse AIYA workshop tracks and sessions — hands-on AI building in London." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Archivo:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/classes.css">
+<script>
+  try {
+    if (localStorage.getItem('aiya-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+</head>
+<body class="page-track">
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<canvas id="gl"></canvas>
+
+<header>
+  <a href="index.html" class="logo">AIYA✦</a>
+  <nav>
+    <a class="navlink mono" href="classes.html">Classes</a>
+    <a class="navlink mono" href="index.html#room">About</a>
+    <a class="navlink mono" href="index.html#footer">Contact</a>
+    <button id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle-label">Dark</span>
+    </button>
+  </nav>
+</header>
+
+<div class="hud left mono" id="clock">--:--</div>
+<div class="hud right mono">LONDON, UK<br>51.51°N / 0.13°W</div>
+
+<main>
+
+  <div class="track-layout" id="trackRoot">
+    <!-- Rendered by js/classes.js -->
+  </div>
+
+  <section id="footer" class="classes-footer">
+    <div class="foot-grid">
+      <div class="mono dim">AIYA✦ 2026 — learnwithaiya.com</div>
+      <div class="mono dim"><a href="classes.html">← All classes</a></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/sessions-data.js"></script>
+<script src="js/classes.js"></script>
+</body>
+</html>

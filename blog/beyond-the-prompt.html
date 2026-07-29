@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Beyond the prompt — AIYA✦ Blog</title>
+<meta name="description" content="What actually changes after week one at an AIYA workshop — beyond the prompt and into building real things." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Archivo:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/blog.css">
+<script>
+  try {
+    if (localStorage.getItem('aiya-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+</head>
+<body class="page-article">
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<canvas id="gl"></canvas>
+
+<header>
+  <a href="../index.html" class="logo">AIYA✦</a>
+  <nav>
+    <a class="navlink mono" href="../index.html#work-wrap">Workshops</a>
+    <a class="navlink mono" href="../blog.html">Blog</a>
+    <a class="navlink mono" href="../index.html#footer">Contact</a>
+    <button id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle-label">Dark</span>
+    </button>
+  </nav>
+</header>
+
+<div class="hud left mono" id="clock">--:--</div>
+<div class="hud right mono">LONDON, UK<br>51.51°N / 0.13°W</div>
+
+<main>
+
+  <article>
+    <header class="article-hero">
+      <a class="article-back mono rv" href="../blog.html">← All posts</a>
+      <div class="article-meta rv">
+        <span class="mono">B/01 · Workshops</span>
+        <span class="mono dim">18 Jul 2026</span>
+        <span class="mono dim">12 min read</span>
+      </div>
+      <h1 class="article-title rv">Beyond the prompt: what actually changes after week one</h1>
+      <p class="article-dek rv">Most people arrive thinking AI is a smarter search box. They leave having shipped something small, useful and theirs.</p>
+    </header>
+
+    <div class="article-body">
+      <p class="lead rv">The first question we hear is almost always the same: “Am I going to break something?” The second is: “Do I need to know how to code?” By hour three, neither question matters much anymore.</p>
+
+      <p class="rv">That’s not because we hand out confidence like stickers. It’s because the room is designed for <span class="hl">small wins</span> — a working draft, a live link, a workflow that saves twenty minutes on a task you already hate.</p>
+
+      <h2 class="rv">The shift isn’t technical first</h2>
+      <p class="rv">Beginners don’t get stuck on models or APIs. They get stuck on permission — the feeling that AI is for “other people.” Week one is about reversing that. You sit next to someone who asked the same question two minutes ago. You watch a tutor unstick them in plain English. You realise the gap is smaller than LinkedIn made it look.</p>
+
+      <blockquote class="rv">“I thought I’d leave with notes. I left with something I could send to a client.”</blockquote>
+
+      <h2 class="rv">What we actually build</h2>
+      <p class="rv">Nothing precious. A one-page site. A simple assistant tuned to your voice. An automation that pulls the boring bit out of a weekly report. The point isn’t the artefact — it’s the <span class="hl">repeatable loop</span>: idea → prompt → tweak → ship → show someone.</p>
+
+      <p class="rv">Once you’ve run that loop once, with humans in the room, the second time is yours. That’s the whole thesis of AIYA: beyond the prompt, into the build.</p>
+
+      <h2 class="rv">Come see it in person</h2>
+      <p class="rv">If this sounds like the kind of learning you’ve been looking for, the workshops are where it happens — small cohorts, real classroom, zero code required.</p>
+    </div>
+  </article>
+
+  <section id="footer" class="blog-footer">
+    <div>
+      <div class="mono dim rv">Ready when you are</div>
+      <h2 class="cta-title rv">Say<br>AIYA<span class="bang">!</span></h2>
+      <a class="magnet rv" href="../index.html#work-wrap"><span>See the workshops</span><span>→</span></a>
+    </div>
+    <div class="foot-grid">
+      <div class="mono dim">AIYA✦ 2026 — learnwithaiya.com</div>
+      <div class="mono dim"><a href="../blog.html">← Back to blog</a></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../js/blog.js"></script>
+</body>
+</html>

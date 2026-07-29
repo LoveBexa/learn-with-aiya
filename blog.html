@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AIYA✦ — Blog</title>
+<meta name="description" content="Notes from the AIYA classroom — practical Gen AI tips, workshop stories and build-in-public updates from London." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Archivo:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/blog.css">
+<script>
+  try {
+    if (localStorage.getItem('aiya-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+</head>
+<body class="page-blog">
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<canvas id="gl"></canvas>
+
+<header>
+  <a href="index.html" class="logo">AIYA✦</a>
+  <nav>
+    <a class="navlink mono" href="index.html#work-wrap">Workshops</a>
+    <a class="navlink mono" href="index.html#room">About</a>
+    <a class="navlink mono" href="index.html#footer">Contact</a>
+    <button id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle-label">Dark</span>
+    </button>
+  </nav>
+</header>
+
+<div class="hud left mono" id="clock">--:--</div>
+<div class="hud right mono">LONDON, UK<br>51.51°N / 0.13°W</div>
+
+<main>
+
+  <section class="blog-hero">
+    <div class="blog-hero-eyebrow rv">
+      <div class="dot"></div>
+      <div class="mono">Field notes · build in public</div>
+    </div>
+    <h1 class="blog-hero-title rv">The<br>Blog</h1>
+    <p class="blog-hero-lede rv">Short, honest posts from the classroom — what we’re learning, building and teaching as <em>Gen AI</em> moves from hype to habit.</p>
+  </section>
+
+  <section class="blog-featured rv" aria-labelledby="featured-title">
+    <div class="blog-featured-inner">
+      <div class="mono dim">Featured · B/01</div>
+      <h2 class="blog-featured-title" id="featured-title">Beyond the prompt: what actually changes after week one</h2>
+      <p class="blog-featured-excerpt">Most people arrive thinking AI is a smarter search box. They leave having shipped something small, useful and theirs. Here’s what shifts in the first three hours.</p>
+      <div class="blog-featured-meta">
+        <span class="mono">12 min read</span>
+        <span class="mono dim">18 Jul 2026</span>
+      </div>
+      <a class="blog-read magnet" href="blog/beyond-the-prompt.html"><span>Read the post</span><span>→</span></a>
+    </div>
+  </section>
+
+  <section class="blog-list-wrap">
+    <div class="blog-list-head rv">
+      <h2 class="sec-title">Latest<br>posts</h2>
+      <div class="blog-tags" aria-label="Topics">
+        <span class="blog-tag is-active mono">All</span>
+        <span class="blog-tag mono">Workshops</span>
+        <span class="blog-tag mono">Build logs</span>
+        <span class="blog-tag mono">Beginners</span>
+      </div>
+    </div>
+
+    <div class="blog-grid">
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/02</span>
+            <span class="mono">Workshops</span>
+          </div>
+          <h3>Why we still believe in classrooms</h3>
+          <p>Async courses are fine. But when something breaks at 2pm on a Tuesday, you want a human in the room — not another tab.</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">8 min · 4 Jul 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/03</span>
+            <span class="mono">Beginners</span>
+          </div>
+          <h3>Five things to bring to your first AI workshop</h3>
+          <p>Laptop, curiosity, and a messy real-world problem beat any amount of prep reading. A practical packing list from Bexa.</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">5 min · 22 Jun 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/04</span>
+            <span class="mono">Build logs</span>
+          </div>
+          <h3>From idea to live website in an afternoon</h3>
+          <p>How one cohort member went from “I’m not technical” to sharing a link before the tea break. No code, no drama.</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">10 min · 9 Jun 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/05</span>
+            <span class="mono">Workshops</span>
+          </div>
+          <h3>Automation without the jargon</h3>
+          <p>Triggers, agents, workflows — translated into plain English for busy founders who just want Tuesday mornings back.</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">7 min · 28 May 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/06</span>
+            <span class="mono">Beginners</span>
+          </div>
+          <h3>What “beginner-friendly” really means here</h3>
+          <p>It’s not dumbing things down. It’s designing the room so nobody feels stupid for asking the obvious question.</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">6 min · 14 May 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="blog-card rv">
+        <a class="blog-card-link" href="#">
+          <div class="blog-card-top">
+            <span class="mono dim">B/07</span>
+            <span class="mono">Build logs</span>
+          </div>
+          <h3>Ship It Weekend: what twelve people built</h3>
+          <p>Micro-apps, client portals, internal tools — a recap of one weekend, twelve seats, zero “I’ll finish it at home.”</p>
+          <div class="blog-card-foot">
+            <span class="mono dim">11 min · 2 May 2026</span>
+            <span class="blog-card-arrow">→</span>
+          </div>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <div id="marquee" class="blog-marquee" aria-hidden="true">
+    <div class="mq" id="mq">
+      <span>notes from the classroom</span><span>beyond the prompt</span><span>build with aiya</span><span>notes from the classroom</span><span>beyond the prompt</span><span>build with aiya</span>
+    </div>
+  </div>
+
+  <section id="footer" class="blog-footer">
+    <div>
+      <div class="mono dim rv">Want the full experience?</div>
+      <h2 class="cta-title rv">Join a<br>workshop<span class="bang">.</span></h2>
+      <a class="magnet rv" href="index.html#work-wrap"><span>See the workshops</span><span>→</span></a>
+    </div>
+    <div class="foot-grid">
+      <div class="mono dim">AIYA✦ 2026 — learnwithaiya.com</div>
+      <div class="mono dim"><a href="index.html">← Back to home</a></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/blog.js"></script>
+</body>
+</html>

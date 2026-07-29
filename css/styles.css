@@ -192,7 +192,7 @@ a {
   font-size: 12px;
   letter-spacing: 0.2em;
 }
-header {
+body > header {
   position: fixed;
   top: 0;
   left: 0;
@@ -206,28 +206,28 @@ header {
   color: #EFEEE9;
 }
 
-header .logo {
+body > header .logo {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 20px;
   letter-spacing: -0.02em;
 }
 
-header nav {
+body > header nav {
   display: flex;
   gap: 28px;
   align-items: center;
 }
 
-header .mono {
+body > header .mono {
   color: #EFEEE9;
 }
 
-header a.navlink {
+body > header a.navlink {
   position: relative;
 }
 
-header a.navlink::after {
+body > header a.navlink::after {
   content: "";
   position: absolute;
   left: 0;
@@ -240,9 +240,25 @@ header a.navlink::after {
   transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-header a.navlink:hover::after {
+body > header a.navlink:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Content headers inside main — not the fixed site chrome */
+main header {
+  position: static;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: auto;
+  mix-blend-mode: normal;
+  color: inherit;
+  display: block;
+  padding: 0;
+  flex-direction: unset;
+  justify-content: unset;
+  align-items: unset;
 }
 
 #themeToggle {
@@ -727,6 +743,8 @@ h1 .bang span {
   position: relative;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+  color: inherit;
+  text-decoration: none;
 }
 
 .wcard:hover {
@@ -897,7 +915,7 @@ h1 .bang span {
 
 /* ---------- tablet + mobile (up to iPad) ---------- */
 @media (max-width: 1024px) {
-  header {
+  body > header {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
@@ -907,7 +925,7 @@ h1 .bang span {
     border-bottom: none;
   }
 
-  header .logo {
+  body > header .logo {
     display: block;
     width: 100%;
     color: #EFEEE9;
@@ -916,7 +934,7 @@ h1 .bang span {
     padding: 18px var(--pad) 16px;
   }
 
-  header nav {
+  body > header nav {
     justify-content: center;
     flex-wrap: wrap;
     gap: 8px 18px;
@@ -926,17 +944,17 @@ h1 .bang span {
     border-bottom: 1px solid var(--line);
   }
 
-  header nav .mono,
-  header nav a.navlink,
-  header nav #themeToggle {
+  body > header nav .mono,
+  body > header nav a.navlink,
+  body > header nav #themeToggle {
     color: var(--accent);
   }
 
-  header nav a.navlink::after {
+  body > header nav a.navlink::after {
     background: var(--accent);
   }
 
-  header nav #themeToggle {
+  body > header nav #themeToggle {
     padding: 6px 0;
     cursor: pointer;
   }
@@ -1040,10 +1058,7 @@ h1 .bang span {
   }
 
   .work-nav {
-    position: static;
-    width: calc(100% - var(--pad) * 2);
-    justify-content: space-between;
-    margin: 0 var(--pad) 20px;
+    display: none;
   }
 
   #hpin {

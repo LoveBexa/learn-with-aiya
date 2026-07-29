@@ -315,6 +315,14 @@ gsap.to('#hero .hero-title', {
   });
 })();
 
+/* ---------------- homepage workshop tiles ---------------- */
+(function initHomeWcards() {
+  const track = document.getElementById('htrack');
+  if (track && typeof window.AIYA_renderHomeWcards === 'function') {
+    window.AIYA_renderHomeWcards(track);
+  }
+})();
+
 /* ---------------- horizontal workshops + manual nav ---------------- */
 (function initWorkshops() {
   const track = document.getElementById('htrack');
