@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Beyond the Prompt — Build an AI Meal Planning Tool, Royal Arsenal | AIYA✦</title>
+<meta name="description" content="A hands-on AI workshop at Royal Arsenal, London. Go beyond asking AI questions — build a working AI meal-planning and shopping-list tool you can actually use. No coding experience needed." />
+<link rel="canonical" href="https://learnwithaiya.com/beyond-the-prompt.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Beyond the Prompt — Build an AI Meal Planning Tool">
+<meta property="og:description" content="Go beyond asking AI questions. Learn how to use it to build something useful. Hands-on, in person at Royal Arsenal, London.">
+<meta property="og:image" content="https://learnwithaiya.com/images/workshop-photos/ai-app-workshop.png">
+<meta property="og:url" content="https://learnwithaiya.com/beyond-the-prompt.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Archivo:ital,wght@0,400;0,500;1,400&family=Space+Mono:ital,wght@0,400;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/classes.css">
+<script>
+  try {
+    if (localStorage.getItem('aiya-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationEvent",
+  "name": "Beyond the Prompt: Build an AI Meal Planning Tool",
+  "description": "A hands-on AI workshop. Go beyond asking AI questions and build a working AI meal-planning and shopping-list tool.",
+  "startDate": "2026-09-22T19:00:00+01:00",
+  "endDate": "2026-09-22T21:30:00+01:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "Royal Arsenal",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "London",
+      "addressCountry": "GB"
+    }
+  },
+  "image": "https://learnwithaiya.com/images/workshop-photos/ai-app-workshop.png",
+  "organizer": {
+    "@type": "Organization",
+    "name": "AIYA",
+    "url": "https://learnwithaiya.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "49",
+    "priceCurrency": "GBP",
+    "url": "https://buytickets.at/aiya/2352886",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<style>
+  /* More breathing room on this page than the site default. */
+  .page-beyond-the-prompt {
+    --pad: clamp(28px, 6vw, 96px);
+    /* Safety net: the embedded ticket widget doesn't know about our padding
+       and can size itself wider than we've given it — this stops that from
+       pushing the whole page into horizontal scroll on narrow screens. */
+    overflow-x: hidden;
+  }
+
+  .classes-hero-title .title-sub {
+    display: block;
+    font-size: 0.42em;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-top: 0.35em;
+    color: var(--accent);
+  }
+  .classes-hero .classes-hero-subtitle {
+    max-width: none;
+  }
+  /* Full-width hero so the title fits on one line; the first content
+     section's border-top acts as the full-width rule underneath. */
+  .page-beyond-the-prompt .classes-hero {
+    max-width: none;
+    padding-bottom: clamp(72px, 11vh, 120px);
+  }
+  .page-beyond-the-prompt .classes-hero-title {
+    font-size: clamp(34px, 5.6vw, 96px);
+    white-space: nowrap;
+  }
+  @media (max-width: 700px) {
+    .page-beyond-the-prompt .classes-hero-title { white-space: normal; }
+  }
+
+  /* Date/time/venue pills on the left, Book your seat on the right */
+  .hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-bottom: clamp(24px, 4vh, 40px);
+  }
+  .hero-top .hero-when-where { margin-bottom: 0; }
+  .hero-top .session-cta.magnet { margin: 0; }
+
+  /* Content sections — two-column split like session.html's "What you'll
+     build" block: italic serif heading + copy on the left, photo on the
+     right, hairline between sections. */
+  .content-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 64px);
+    padding: clamp(48px, 8vh, 88px) var(--pad);
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .content-split h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(32px, 3.6vw, 48px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 0.8em;
+  }
+  .split-copy p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--ink) 88%, var(--muted));
+  }
+  .split-copy p + p,
+  .split-copy p + ul,
+  .split-copy ul + p,
+  .split-copy ol + p { margin-top: 1em; }
+  .split-copy strong { color: var(--ink); font-weight: 500; }
+  .split-copy .lead {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 24px);
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .split-copy .build-outcomes li { margin-bottom: 0.7em; }
+  .split-copy .build-outcomes li:last-child { margin-bottom: 0; }
+
+  /* Title + description list items (Who's it for / What you need) */
+  .split-copy .build-outcomes.detailed li { margin-bottom: 1.3em; }
+  .build-outcomes.detailed strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.2em;
+  }
+  .build-outcomes.detailed span { color: var(--muted); font-size: 15px; }
+
+  .split-media {
+    aspect-ratio: 4 / 3;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    position: sticky;
+    top: calc(var(--site-header-h, 68px) + 24px);
+  }
+  .split-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .content-split + #book { border-top: 1px solid var(--line); }
+
+  @media (max-width: 1024px) {
+    .content-split { grid-template-columns: 1fr; }
+    .split-media {
+      position: static;
+      aspect-ratio: 16 / 9;
+      max-height: 280px;
+      width: 100%;
+    }
+  }
+
+  /* Date/time/venue bar above the big title */
+  .hero-when-where {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: clamp(20px, 3vh, 28px);
+  }
+  .hero-when-where span {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+
+  /* Step tiles: Tell it what you need → Get a meal plan → Get your shopping list */
+  .content-split.no-media { grid-template-columns: minmax(0, 1fr); }
+  .content-split.no-media .split-copy > p { max-width: 68ch; }
+  .flow-tiles {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 44px);
+    margin: 1.4em 0 1.8em;
+    counter-reset: step;
+  }
+  .flow-tiles li {
+    position: relative;
+    counter-increment: step;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: clamp(22px, 2.4vw, 32px);
+  }
+  .flow-tiles li::before {
+    content: counter(step, decimal-leading-zero);
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .flow-tiles li:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * clamp(28px, 3vw, 44px) / 2);
+    transform: translate(50%, -50%);
+    font-family: 'Syne', sans-serif;
+    color: var(--accent);
+  }
+  .flow-tiles h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(18px, 1.8vw, 22px);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 0.5em;
+  }
+  .split-copy .flow-tiles p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  /* What you need — centred tiles */
+  .needs-centered .split-copy { text-align: center; }
+  .needs-centered .split-copy > .lead { margin-inline: auto; }
+  .need-tiles {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+    max-width: 760px;
+    margin: 0 auto clamp(28px, 4vh, 40px);
+  }
+  .need-tiles li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: clamp(24px, 3vw, 36px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .need-icon {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .need-tiles h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(18px, 1.8vw, 22px);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .split-copy .need-tiles p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 32ch;
+  }
+  @media (max-width: 700px) {
+    .need-tiles { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* Closing notes under the tiles — same 3-column grid so each note
+     lines up under a tile. */
+  .make-notes {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 44px);
+    margin-top: clamp(28px, 4vh, 40px);
+  }
+  .make-notes li {
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .make-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .make-notes h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(18px, 1.8vw, 22px);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 0.4em;
+  }
+  .make-notes p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  @media (max-width: 800px) {
+    .make-notes { grid-template-columns: minmax(0, 1fr); }
+    .flow-tiles { grid-template-columns: minmax(0, 1fr); }
+    .flow-tiles li:not(:last-child)::after {
+      content: "↓";
+      top: auto;
+      bottom: calc(-1 * clamp(28px, 3vw, 44px) / 2);
+      right: 50%;
+      transform: translate(50%, 50%);
+    }
+  }
+
+  /* Ticket Tailor embed — the widget renders its own light-themed UI and
+     isn't dark-mode aware, so it shares the enroll panel's fixed light
+     background (below) rather than the page's theme-variable card colour. */
+  .tt-ticket-widget,
+  .tt-widget,
+  .tt-widget-fallback {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .tt-ticket-widget {
+    margin-top: 24px;
+  }
+  /* The widget's own script can size its iframe wider than the space we've
+     given it (it doesn't know about our padding), which pushes the whole
+     page into horizontal scroll on narrow screens — force it back to fit.
+     Small min-height is just a floor so it never renders as a sliver before
+     the widget's own resize logic sets the real height. */
+  .tt-ticket-widget iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 340px;
+  }
+  .tt-widget-fallback p {
+    font-family: 'Archivo', sans-serif;
+    font-size: 15px;
+    color: #101014;
+  }
+  .tt-widget-fallback a {
+    color: #101014;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .tt-widget-fallback .tt-widget-powered {
+    color: #878782;
+    font-size: 12px;
+  }
+
+  /* Enroll panel — fixed light card (same colour as the Ticket Tailor widget
+     it contains) rather than the page's theme-variable card colour, so
+     the two never mismatch across light/dark mode. */
+  .enroll-panel {
+    background: #F4F3EE;
+    border: 1px solid rgba(16, 16, 20, 0.12);
+    border-radius: 16px;
+    padding: clamp(28px, 4vw, 48px);
+  }
+  .enroll-copy h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 3vw, 36px);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 0.5em;
+    color: #101014;
+  }
+  .enroll-copy h3 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.2;
+    color: #101014;
+    margin-bottom: 0.6em;
+  }
+  .enroll-copy p {
+    color: #55554F;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 0.8em;
+    max-width: 44ch;
+  }
+  .enroll-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin: 0.4em 0 0.8em;
+  }
+  .enroll-price strong {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 3.4vw, 40px);
+    letter-spacing: -0.03em;
+    color: #101014;
+  }
+  .enroll-price span {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #2438FF;
+  }
+  .enroll-meta { font-size: 11px; color: #6B6B66; }
+  .enroll-copy .enroll-friend { margin-top: 1em; }
+  .enroll-meta + .enroll-meta { margin-top: 6px; }
+  .enroll-note {
+    margin-top: 24px;
+    text-align: center;
+  }
+  .enroll-note a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* This is a one-off landing page: a compact black header + a much smaller
+     gap before content, so the date/time/venue and title sit above the fold. */
+  .page-beyond-the-prompt.page-categories main {
+    padding-top: clamp(68px, 8vh, 88px);
+  }
+
+  @media (min-width: 1025px) {
+    .page-beyond-the-prompt header {
+      background: #101014;
+      color: #EFEEE9;
+      mix-blend-mode: normal;
+      padding: 12px var(--pad);
+    }
+    .page-beyond-the-prompt header .logo,
+    .page-beyond-the-prompt header .mono,
+    .page-beyond-the-prompt header a.navlink,
+    .page-beyond-the-prompt header #themeToggle {
+      color: #EFEEE9;
+    }
+    .page-beyond-the-prompt header a.navlink::after {
+      background: #EFEEE9;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-beyond-the-prompt.page-categories main {
+      padding-top: clamp(112px, 16vh, 145px);
+    }
+  }
+</style>
+</head>
+<body class="page-categories page-beyond-the-prompt">
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<canvas id="gl"></canvas>
+
+<header>
+  <a href="index.html" class="logo">AIYA✦</a>
+  <nav>
+    <button id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+      <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+      <span class="theme-toggle-label">Dark</span>
+    </button>
+  </nav>
+</header>
+
+<div class="hud left mono" id="clock">--:--</div>
+<div class="hud right mono">LONDON, UK<br>51.51°N / 0.13°W</div>
+
+<main>
+
+  <section class="classes-hero">
+    <div class="hero-top rv">
+      <div class="hero-when-where">
+        <span>📅 Autumn 2026</span>
+        <span>🕖 7 – 9:30pm</span>
+        <span>📍 London</span>
+      </div>
+      <a class="magnet session-cta" href="#book"><span>Book your seat</span><span>→</span></a>
+    </div>
+    <h1 class="classes-hero-title rv">Beyond the Prompt</h1>
+    <p class="classes-hero-subtitle rv">Go beyond prompting. Learn how to build useful tools with AI.</p>
+    <ul class="make-notes rv">
+      <li>
+        <span class="make-label">01</span>
+        <h3>Build something real</h3>
+        <p>Build a working meal planning tool alongside the instructor using AI.</p>
+      </li>
+      <li>
+        <span class="make-label">02</span>
+        <h3>Learn the method</h3>
+        <p>Learn a simple re-usable approach after building this to turn future ideas and problems into useful AI tools.</p>
+      </li>
+      <li>
+        <span class="make-label">03</span>
+        <h3>Take it further</h3>
+        <p>Leave with a usable first version of your tool and the confidence to keep experimenting and build your next one.</p>
+      </li>
+    </ul>
+  </section>
+
+
+
+  <section class="content-split rv" aria-labelledby="learn-heading">
+    <div class="split-copy">
+      <p>If you've only used ChatGPT or Claude to write emails, generate ideas, create images or answer questions, this is your chance to see what happens when you <strong>start building with AI instead.</strong></p>
+      <p>This is a taster introductory workshop for beginners who have dabbled with AI already but want to take it further. We'll guide you through the process of turning an idea into something usable — using the meal-planning tool as the example. You'll learn how to:</p>
+      <ul class="build-outcomes">
+        <li>Break a problem down into something AI can help build</li>
+        <li>Give AI the right instructions to create something useful</li>
+        <li>Work with AI to build and change your tool</li>
+        <li>Test, troubleshoot and improve what you've made</li>
+        <li>Take the same approach and apply it to other ideas</li>
+      </ul>
+      <p class="lead">The goal isn't to become a developer. It's to realise you can build useful tools with AI to make your life and work easier.</p>
+    </div>
+    <div class="split-media">
+      <img src="images/workshop-photos/ai-app-workshop.png" alt="Attendees building an AI tool on their laptops at an AIYA workshop in London" loading="lazy" decoding="async">
+    </div>
+  </section>
+
+  <section class="content-split no-media rv" aria-labelledby="make-heading">
+    <div class="split-copy">
+      <h2 id="make-heading">What you'll actually make</h2>
+      <p>A simple AI meal-planning tool that can:</p>
+      <ol class="flow-tiles" aria-label="How the meal-planning tool works">
+        <li>
+          <h3>Build your recipe catalogue</h3>
+          <p>Find recipes you like online and build your own personal catalogue of meals.</p>
+        </li>
+        <li>
+          <h3>Build your weekly meal plan</h3>
+          <p>Use your recipe catalogue to create a meal plan for the week based on what you want to eat.</p>
+        </li>
+        <li>
+          <h3>Generate your shopping list</h3>
+          <p>Turn your meal plan into a complete shopping list with the ingredients you need for the week.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="content-split rv" aria-labelledby="audience-heading">
+    <div class="split-copy">
+      <h2 id="audience-heading">Who's it for?</h2>
+      <ul class="build-outcomes detailed">
+        <li><strong>You've only used AI for prompting</strong><span>You use ChatGPT or Claude for emails, copy, research and images, but haven't explored what else you can create.</span></li>
+        <li><strong>You have a problem you'd love to make easier</strong><span>Maybe it's something repetitive at work, in your business or everyday life.</span></li>
+        <li><strong>You're curious about building with AI</strong><span>You don't want to become a Pdeveloper. You just want to know what's possible — and have a go yourself.</span></li>
+      </ul>
+    </div>
+    <div class="split-media">
+      <img src="images/workshop-photos/ai-workshop-chatting.png" alt="Two attendees talking through ideas during an AIYA AI workshop in London" loading="lazy" decoding="async">
+    </div>
+  </section>
+
+  <section class="content-split no-media needs-centered rv" aria-labelledby="needs-heading">
+    <div class="split-copy">
+      <h2 id="needs-heading">What you need</h2>
+      <ul class="need-tiles">
+        <li>
+          <span class="need-icon" aria-hidden="true">💻</span>
+          <h3>A laptop</h3>
+          <p>You'll be building during the workshop, so bring your laptop.</p>
+        </li>
+        <li>
+          <span class="need-icon" aria-hidden="true">🤖</span>
+          <h3>ChatGPT Pro / Claude Pro</h3>
+          <p>You'll need an active ChatGPT Pro or Claude Pro subscription, set up on your laptop, before the workshop.</p>
+        </li>
+      </ul>
+      <p class="lead">No coding experience required.</p>
+    </div>
+  </section>
+
+  <section class="classes-section" id="book" aria-labelledby="book-heading">
+    <div class="enroll-panel rv">
+      <div class="enroll-copy">
+        <h2 id="book-heading">Ready to go beyond the prompt?</h2>
+   </div>
+
+      <div class="tt-ticket-widget">
+<!-- Ticket Tailor Widget. Paste this into your website where you want the widget to appear. Do not change the code or the widget may not work properly. -->
+<div class="tt-widget"><div class="tt-widget-fallback"><p><a href="https://www.tickettailor.com/all-tickets/aiya/rtne/1/?ref=website_widget&show_search_filter=true&show_date_filter=true&show_sort=true" target="_blank">Click here to buy tickets</a><br /><small><a href="https://www.tickettailor.com?rf=wdg_329553" class="tt-widget-powered">Sell tickets online with Ticket Tailor</a></small></p></div><script src="https://cdn.tickettailor.com/js/widgets/min/widget.js" data-url="https://www.tickettailor.com/all-tickets/aiya/rtne/1/?ref=website_widget&show_search_filter=true&show_date_filter=true&show_sort=true" data-type="inline" data-inline-minimal="true" data-inline-show-logo="false" data-inline-bg-fill="false" data-inline-inherit-ref-from-url-param="" data-inline-ref="website_widget"></script></div><!-- End of Ticket Tailor Widget -->
+      </div>
+    </div>
+
+    <p class="enroll-note mono dim rv">Questions? <a href="mailto:bexa@learnwithaiya.com">bexa@learnwithaiya.com</a></p>
+  </section>
+
+  <section id="footer" class="classes-footer">
+    <div class="foot-grid">
+      <div class="mono dim">AIYA✦ 2026 — learnwithaiya.com</div>
+      <div class="mono dim"><a href="mailto:bexa@learnwithaiya.com">bexa@learnwithaiya.com</a></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/classes.js"></script>
+</body>
+</html>
