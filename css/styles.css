@@ -786,6 +786,23 @@ h1 .bang span {
   line-height: 1.02;
   letter-spacing: -0.02em;
   margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wcard-path {
+  display: block;
+}
+
+.wcard-example {
+  display: block;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(24px, 2.4vw, 36px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
 }
 
 .wcard p {
@@ -828,6 +845,34 @@ h1 .bang span {
   transform: translate(0, 0);
   color: var(--paper);
 }
+
+/* Not-yet-bookable card (e.g. Build Labs) — no link, no hover lift/fill */
+.wcard.is-soon {
+  cursor: default;
+}
+.wcard.is-soon:hover,
+.wcard.is-soon:active {
+  transform: none;
+}
+.wcard.is-soon:hover .fill,
+.wcard.is-soon:active .fill {
+  transform: translateY(101%);
+}
+.wcard.is-soon:hover h3,
+.wcard.is-soon:hover .num,
+.wcard.is-soon:active h3,
+.wcard.is-soon:active .num {
+  color: inherit;
+}
+.wcard.is-soon:hover p,
+.wcard.is-soon:active p,
+.wcard.is-soon:hover .meta .mono.dim,
+.wcard.is-soon:active .meta .mono.dim {
+  color: var(--muted);
+}
+.wcard.is-soon .meta .mono:not(.dim) {
+  color: var(--accent);
+}
 #room {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -836,11 +881,19 @@ h1 .bang span {
   padding-bottom: 18vh;
 }
 
+/* Points scroll on the left, sticky heading sits on the right */
 #room .sticky {
+  grid-column: 2;
+  grid-row: 1;
   position: sticky;
   top: 18vh;
   align-self: start;
   height: fit-content;
+}
+
+#room .points {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 #room .sticky .sec-title em {
@@ -850,6 +903,59 @@ h1 .bang span {
 
 #room .sticky .sec-title {
   font-size: clamp(34px, 6.4vw, 102px);
+}
+
+/* Draggable 3D heading — stacked copies (added by main.js) give it depth */
+.t3d {
+  perspective: 1200px;
+  cursor: grab;
+  touch-action: pan-y; /* vertical swipes still scroll the page on touch */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.t3d.is-dragging {
+  cursor: grabbing;
+}
+
+.t3d-rot {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.t3d-rot > .sec-title {
+  transform: translateZ(0);
+}
+
+.t3d-rot > .t3d-layer {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  pointer-events: none;
+  color: color-mix(in srgb, var(--ink) 45%, var(--paper));
+}
+
+#room .sticky .t3d-layer em {
+  color: color-mix(in srgb, var(--accent) 55%, var(--ink));
+}
+
+.t3d-hint {
+  margin-top: 18px;
+  font-size: 10px;
+  transition: opacity 0.4s;
+}
+
+.t3d.has-spun .t3d-hint {
+  opacity: 0;
+}
+
+.t3d.t3d-static {
+  cursor: auto;
+}
+
+.t3d.t3d-static .t3d-hint {
+  display: none;
 }
 
 .point {
@@ -877,6 +983,13 @@ h1 .bang span {
 @media (max-width: 820px) {
   #room {
     grid-template-columns: 1fr;
+  }
+
+  /* Single column on small screens — heading back on top */
+  #room .sticky,
+  #room .points {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   #room .sticky {

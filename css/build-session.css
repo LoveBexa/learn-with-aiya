@@ -1,0 +1,770 @@
+/* Shared styles for AIYA's "build session" landing pages — one-off event
+   pages (beyond-the-prompt.html, prompt-to-vibecoding.html, and future
+   siblings) that share this exact layout but swap in their own copy.
+   Every page in this family adds the `page-build-session` class to <body>
+   alongside the shared `page-categories` class (for css/classes.css) and
+   its own unique `page-<slug>` class (for any one-off override that page
+   alone needs — there are none today). */
+
+/* More breathing room on this page than the site default. */
+/* iOS Safari ignores overflow-x on body alone — clip on html as well so
+   nothing can widen the page and push fixed bars off-screen. */
+html:has(body.page-build-session) {
+  overflow-x: hidden;
+}
+.page-build-session {
+  --pad: clamp(28px, 6vw, 96px);
+  /* Safety net: the embedded ticket widget doesn't know about our padding
+     and can size itself wider than we've given it — this stops that from
+     pushing the whole page into horizontal scroll on narrow screens.
+     clip (not hidden) so body doesn't become a scroll container now that
+     html also clips — that would break the sticky photos. */
+  overflow-x: hidden;
+  overflow-x: clip;
+  /* Wavy section divider — same colour/opacity as --line, just drawn as a
+     thin repeating sine-wave stroke instead of a straight hairline. */
+  --wavy-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='16' viewBox='0 0 40 16'%3E%3Cpath d='M0 8 Q 10 0 20 8 T 40 8' fill='none' stroke='rgb(16,16,20)' stroke-opacity='0.14' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+html.dark .page-build-session {
+  --wavy-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='16' viewBox='0 0 40 16'%3E%3Cpath d='M0 8 Q 10 0 20 8 T 40 8' fill='none' stroke='rgb(239,238,233)' stroke-opacity='0.16' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.classes-hero-title .title-sub {
+  display: block;
+  font-size: 0.42em;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-top: 0.35em;
+  color: var(--accent);
+}
+.classes-hero .classes-hero-subtitle {
+  max-width: none;
+}
+/* Full-width hero so the title fits on one line; the first content
+   section's wavy divider acts as the full-width rule underneath. */
+.page-build-session .classes-hero {
+  max-width: none;
+  padding-bottom: clamp(72px, 11vh, 120px);
+}
+.page-build-session .classes-hero-title {
+  font-size: clamp(34px, 5.6vw, 96px);
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .page-build-session .classes-hero-title { white-space: normal; }
+}
+
+/* Date/time/venue pills on the left, Book your seat on the right */
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-bottom: clamp(24px, 4vh, 40px);
+}
+.hero-top .hero-when-where { margin-bottom: 0; }
+.hero-top .session-cta.magnet { margin: 0; }
+/* Solid blue by default, not just revealed on hover, so it stands out
+   against the light hero background rather than reading as an outline. */
+.hero-top .session-cta.magnet {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+/* Content sections — two-column split like session.html's "What you'll
+   build" block: italic serif heading + copy on the left, photo on the
+   right, a wavy line between sections instead of a straight hairline. */
+.content-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(48px, 8vh, 88px) var(--pad);
+  position: relative;
+  align-items: start;
+}
+.content-split::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background-image: var(--wavy-line);
+  background-repeat: repeat-x;
+  background-position: left center;
+}
+.content-split h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(32px, 3.6vw, 48px);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 0.8em;
+}
+.split-copy p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--ink) 88%, var(--muted));
+}
+.split-copy p + p,
+.split-copy p + ul,
+.split-copy ul + p,
+.split-copy ol + p { margin-top: 1em; }
+.split-copy strong { color: var(--ink); font-weight: 500; }
+.split-copy .lead {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.35;
+  color: var(--ink);
+}
+.split-copy .build-outcomes li { margin-bottom: 0.7em; }
+.split-copy .build-outcomes li:last-child { margin-bottom: 0; }
+
+/* Title + description list items (Who's it for / What you need) */
+.split-copy .build-outcomes.detailed li { margin-bottom: 1.3em; }
+.build-outcomes.detailed strong {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.2em;
+}
+.build-outcomes.detailed span { color: var(--muted); font-size: 15px; }
+
+.split-media {
+  aspect-ratio: 4 / 3;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  position: sticky;
+  top: calc(var(--site-header-h, 68px) + 24px);
+}
+/* Image-left variant — swaps visual column order on desktop only, via
+   `order` rather than DOM order, so the heading still reads before the
+   image for screen readers and mobile still stacks copy-then-image like
+   every other content-split section. */
+@media (min-width: 1025px) {
+  .content-split.media-left .split-media { order: -1; }
+}
+.split-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.content-split + #book { border-top: 1px solid var(--line); }
+
+/* Meet your instructor — heading spans full width on top, photo sits
+   inline with the bio underneath (like session.html's "build" block, but
+   with its own heading row instead of a shared two-column heading+copy).
+   The section itself uses the same wavy grey callout band as index.html's
+   #manifesto ("AIYA runs beginner-friendly workshops...") — a soft grey
+   fill with a wiggly top and bottom edge instead of a straight border. */
+.instructor {
+  position: relative;
+  margin-top: clamp(48px, 8vh, 88px);
+  margin-bottom: clamp(48px, 8vh, 88px);
+  padding: clamp(48px, 8vh, 88px) var(--pad);
+  background: var(--card-fill);
+  overflow: visible;
+}
+.instructor::before,
+.instructor::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: var(--card-fill);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+.instructor::before {
+  top: -48px;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48' preserveAspectRatio='none'%3E%3Cpath d='M0 48V26C120 6 240 40 360 18C480 0 600 34 720 16C840 2 960 32 1080 14C1140 22 1200 10 1200 26V48Z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48' preserveAspectRatio='none'%3E%3Cpath d='M0 48V26C120 6 240 40 360 18C480 0 600 34 720 16C840 2 960 32 1080 14C1140 22 1200 10 1200 26V48Z' fill='%23000'/%3E%3C/svg%3E");
+}
+.instructor::after {
+  bottom: -48px;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V22C1080 38 960 10 840 32C720 46 600 14 480 30C360 48 240 8 120 42H0V0Z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V22C1080 38 960 10 840 32C720 46 600 14 480 30C360 48 240 8 120 42H0V0Z' fill='%23000'/%3E%3C/svg%3E");
+}
+@media (max-width: 1024px) {
+  .instructor::before,
+  .instructor::after {
+    height: 36px;
+  }
+  .instructor::before { top: -36px; }
+  .instructor::after { bottom: -36px; }
+}
+.instructor h2 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(32px, 3.6vw, 48px);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: clamp(24px, 4vh, 40px);
+}
+.instructor-row {
+  display: grid;
+  /* Compact: smaller fixed photo column, bio gets the rest (fewer lines) */
+  grid-template-columns: clamp(180px, 18vw, 260px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+/* Bio runs the full width of the text column instead of wrapping at a
+   fixed character count — keeps the section shorter top-to-bottom. */
+.instructor .split-copy > p { max-width: none; }
+.instructor-photo {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 340px;
+  border-radius: 6px;
+  border: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  background-color: var(--card);
+  background-image: var(--speckle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.instructor-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%; /* portrait photo — keep the face in the square */
+  display: block;
+}
+.instructor-photo:has(img) { border-style: solid; border-color: var(--line); }
+.instructor-photo:has(img) .mono { display: none; }
+.split-copy .instructor-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 1.4em;
+}
+.instructor-name strong {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(20px, 2vw, 26px);
+  letter-spacing: -0.02em;
+}
+.instructor-name .mono { font-size: 11px; }
+.instructor-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1.6em;
+}
+.instructor-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 16px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.instructor-links a:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+@media (max-width: 1024px) {
+  /* Photo goes full-width and stacks above the bio; heading is already
+     above both since it's outside .instructor-row in the markup. Taller
+     aspect ratio (not the square 1:1 used on desktop) since the source
+     photo is a portrait shot — a wide crop would lose too much of it. */
+  .instructor-row { grid-template-columns: minmax(0, 1fr); }
+  .instructor-photo { max-width: 320px; margin: 0 auto; aspect-ratio: 4 / 5; border-radius: 10px; }
+}
+
+@media (max-width: 1024px) {
+  .content-split { grid-template-columns: 1fr; }
+  .split-media {
+    position: static;
+    aspect-ratio: 16 / 9;
+    max-height: 280px;
+    width: 100%;
+  }
+}
+
+/* Date/time/venue bar above the big title */
+.hero-when-where {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: clamp(20px, 3vh, 28px);
+}
+.hero-when-where span {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+/* Step tiles: Tell it what you need → Get a meal plan → Get your shopping list */
+.content-split.no-media { grid-template-columns: minmax(0, 1fr); }
+.content-split.no-media .split-copy > p { max-width: 68ch; }
+.flow-tiles {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 44px);
+  margin: 1.4em 0 1.8em;
+  counter-reset: step;
+}
+.flow-tiles li {
+  position: relative;
+  counter-increment: step;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(22px, 2.4vw, 32px);
+}
+.flow-tiles li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.flow-tiles li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: calc(-1 * clamp(28px, 3vw, 44px) / 2);
+  transform: translate(50%, -50%);
+  font-family: 'Syne', sans-serif;
+  color: var(--accent);
+}
+.flow-tiles h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.5em;
+}
+.split-copy .flow-tiles p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+/* What you need — centred tiles */
+.needs-centered .split-copy { text-align: center; }
+.needs-centered .split-copy > .lead { margin-inline: auto; }
+.need-tiles {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  max-width: 760px;
+  margin: 0 auto clamp(28px, 4vh, 40px);
+}
+.need-tiles li {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(24px, 3vw, 36px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.need-icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.need-tiles h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.split-copy .need-tiles p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 32ch;
+}
+@media (max-width: 700px) {
+  .need-tiles { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Closing notes under the tiles — same 3-column grid so each note
+   lines up under a tile. */
+.make-notes {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 44px);
+  margin-top: clamp(28px, 4vh, 40px);
+}
+/* Speckled grey tiles — a touch darker than the page, with a fine
+   noise texture so they lift off the background without shouting. */
+.page-build-session {
+  --speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.06 0 0 0 0 0.08 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html.dark .page-build-session {
+  --speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.94 0 0 0 0 0.93 0 0 0 0 0.91 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.make-notes {
+  gap: clamp(16px, 2vw, 24px);
+}
+.make-notes li {
+  background-color: color-mix(in srgb, var(--card), var(--ink) 2%);
+  background-image: var(--speckle);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(22px, 2.4vw, 32px);
+}
+.make-notes li p {
+  color: color-mix(in srgb, var(--ink) 80%, var(--muted));
+}
+.make-label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.make-notes h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.4em;
+}
+.make-notes p {
+  font-size: 15px;
+  line-height: 1.55;
+}
+@media (max-width: 800px) {
+  .make-notes { grid-template-columns: minmax(0, 1fr); }
+  .flow-tiles { grid-template-columns: minmax(0, 1fr); }
+  .flow-tiles li:not(:last-child)::after {
+    content: "↓";
+    top: auto;
+    bottom: calc(-1 * clamp(28px, 3vw, 44px) / 2);
+    right: 50%;
+    transform: translate(50%, 50%);
+  }
+}
+
+/* Ticket Tailor embed — the widget renders its own light-themed UI and
+   isn't dark-mode aware, so it shares the enroll panel's fixed light
+   background (below) rather than the page's theme-variable card colour. */
+.tt-ticket-widget,
+.tt-widget,
+.tt-widget-fallback {
+  max-width: 100%;
+  overflow: hidden;
+}
+.tt-ticket-widget {
+  margin-top: 24px;
+}
+/* The widget's own script can size its iframe wider than the space we've
+   given it (it doesn't know about our padding), which pushes the whole
+   page into horizontal scroll on narrow screens — force it back to fit.
+   Small min-height is just a floor so it never renders as a sliver before
+   the widget's own resize logic sets the real height. */
+.tt-ticket-widget iframe {
+  /* iOS Safari sizes iframes to their content and ignores width: 100%;
+     width: 1px + min-width: 100% is the standard workaround. */
+  width: 1px !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  min-height: 340px;
+}
+.tt-widget-fallback p {
+  font-family: 'Archivo', sans-serif;
+  font-size: 15px;
+  color: #101014;
+}
+.tt-widget-fallback a {
+  color: #101014;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tt-widget-fallback .tt-widget-powered {
+  color: #878782;
+  font-size: 12px;
+}
+
+/* Enroll panel — fixed light card (same colour as the Ticket Tailor widget
+   it contains) rather than the page's theme-variable card colour, so
+   the two never mismatch across light/dark mode. */
+.enroll-panel {
+  background: #F4F3EE;
+  border: 1px solid rgba(16, 16, 20, 0.12);
+  border-radius: 16px;
+  padding: clamp(28px, 4vw, 48px);
+}
+.enroll-copy h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 0.5em;
+  color: #101014;
+}
+.enroll-copy h3 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.2;
+  color: #101014;
+  margin-bottom: 0.6em;
+}
+.enroll-copy p {
+  color: #55554F;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 0.8em;
+  max-width: 44ch;
+}
+.enroll-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0.4em 0 0.8em;
+}
+.enroll-price strong {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 40px);
+  letter-spacing: -0.03em;
+  color: #101014;
+}
+.enroll-price span {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2438FF;
+}
+/* Footer text sits on the same line as the fixed BST clock (.hud.left,
+   bottom: 18px — 14px on small screens) once you reach the page end. */
+.page-build-session .foot-grid { justify-content: flex-end; }
+.page-build-session #footer.classes-footer { padding-bottom: 18px; }
+@media (max-width: 1024px) {
+  .page-build-session #footer.classes-footer { padding-bottom: 14px; }
+  /* Site CSS centres the footer on small screens — keep it right-aligned
+     so it doesn't run into the clock on the left. */
+  .page-build-session .foot-grid {
+    align-items: flex-end;
+    text-align: right;
+  }
+  .page-build-session .foot-grid > .mono.dim {
+    width: auto;
+    text-align: right;
+    font-size: 10px;
+  }
+}
+
+/* Desktop: Book your seat in the top bar once the hero button is gone —
+   solid brand blue so it stands out against the black bar rather than
+   blending in as an outline button. */
+.nav-book {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: #2438FF;
+  border: 1px solid #2438FF;
+  border-radius: 999px;
+  padding: 8px 16px;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, color 0.2s ease;
+}
+.show-nav-book .nav-book {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.nav-book:hover {
+  background: #4051FF;
+}
+
+/* Mobile/tablet: sticky Book your seat bar at the bottom of the screen */
+.mobile-book-bar { display: none; }
+@media (max-width: 1024px) {
+  .nav-book,
+  .hero-top .session-cta { display: none; }
+
+  .mobile-book-bar {
+    --bar-h: 76px;
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100vw;
+    z-index: 101;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    transform: translateY(110%);
+    transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .show-book-bar .mobile-book-bar { transform: none; }
+  .mobile-book-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    border-radius: 999px;
+    background: #2438FF;
+    color: #FFFFFF;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  /* Lift the BST clock above the bar while it's showing */
+  .page-build-session .hud.left {
+    transition: bottom 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .show-book-bar .hud.left {
+    bottom: calc(76px + env(safe-area-inset-bottom) + 12px);
+  }
+}
+.enroll-meta { font-size: 11px; color: #6B6B66; }
+/* On phones the Ticket Tailor widget's search/date/sort row needs more
+   width than the padded panel leaves it, and its right edge gets clipped
+   — pull the panel closer to the screen edges and trim its padding. */
+@media (max-width: 600px) {
+  .page-build-session #book {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .page-build-session .enroll-panel {
+    padding: 28px 14px;
+  }
+  .page-build-session .enroll-copy {
+    padding: 0 8px;
+  }
+}
+.enroll-copy .enroll-friend { margin-top: 1em; }
+.enroll-meta + .enroll-meta { margin-top: 6px; }
+.enroll-note {
+  margin-top: 24px;
+  text-align: center;
+}
+.enroll-note a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* About AIYA callout — sits below the ticket widget. Same speckled grey
+   tile as .make-notes, just narrower and centered, with a circular
+   logo mark beside the copy. */
+.aiya-about {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 32px);
+  max-width: 680px;
+  margin: clamp(32px, 5vh, 56px) auto 0;
+  padding: clamp(24px, 3vw, 32px);
+  background-color: color-mix(in srgb, var(--card), var(--ink) 2%);
+  background-image: var(--speckle);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.aiya-about-logo {
+  flex: none;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+.aiya-about p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--ink) 80%, var(--muted));
+}
+@media (max-width: 600px) {
+  .aiya-about {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* This is a one-off landing page: a compact black header + a much smaller
+   gap before content, so the date/time/venue and title sit above the fold. */
+.page-build-session.page-categories main {
+  padding-top: clamp(68px, 8vh, 88px);
+}
+
+@media (min-width: 1025px) {
+  .page-build-session header {
+    background: #101014;
+    color: #EFEEE9;
+    mix-blend-mode: normal;
+    padding: 12px var(--pad);
+  }
+  .page-build-session header .logo,
+  .page-build-session header .mono,
+  .page-build-session header a.navlink,
+  .page-build-session header #themeToggle {
+    color: #EFEEE9;
+  }
+  .page-build-session header a.navlink::after {
+    background: #EFEEE9;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-build-session.page-categories main {
+    padding-top: clamp(112px, 16vh, 145px);
+  }
+}

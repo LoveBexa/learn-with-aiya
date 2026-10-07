@@ -14,12 +14,25 @@ function statusPill(status) {
   return `<span class="status-pill status-pill--${isOpen ? 'open' : 'coming-soon'}">${isOpen ? 'Open' : 'Coming Soon'}</span>`;
 }
 
+function sessionCtaHtml(label, href) {
+  return `<a class="magnet session-cta" href="${href}"><span>${escapeHtml(label)}</span><span>→</span></a>`;
+}
+
 function trackUrl(categoryId, trackId) {
   return window.AIYA_trackUrl(categoryId, trackId);
 }
 
 function workshopUrl(slug) {
   return `session.html?s=${encodeURIComponent(slug)}`;
+}
+
+function workshopPhotoHtml(slug, fallbackText) {
+  const src = window.AIYA_getWorkshopPhoto?.(slug);
+  if (src) {
+    const alt = window.AIYA_getWorkshopPhotoAlt?.(slug) || fallbackText;
+    return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />`;
+  }
+  return `<span class="mono dim">${escapeHtml(fallbackText)}</span>`;
 }
 
 function getTrackIdFromParams(params) {
@@ -36,18 +49,28 @@ function renderBreadcrumb(items) {
     .join('');
 }
 
-function renderPathBanner(breadcrumbItems, showPathTrail = false) {
-  const trail = showPathTrail
-    ? `<div class="path-banner-trail" aria-hidden="true">
-        <span>Start here</span>
-        <span class="arrow">→</span>
-        <span class="highlight">Discover AI</span>
-        <span class="arrow">→</span>
-        <span>Build Sessions</span>
-        <span class="arrow">→</span>
-        <span>Build Labs</span>
-      </div>`
-    : '';
+function renderPathTrail(activePathId) {
+  const steps = [
+    { id: 'start', label: 'Start here', href: 'classes.html' },
+    { id: 'discover', label: 'Discover AI', href: trackUrl('discover', 'all') },
+    { id: 'build-sessions', label: 'Build Sessions', href: trackUrl('build-sessions', 'all') },
+    { id: 'build-labs', label: 'Build Labs', href: trackUrl('build-labs', 'all') },
+  ];
+
+  return `<nav class="path-banner-trail" aria-label="Browse paths">${steps
+    .map((step, i) => {
+      const arrow = i > 0 ? '<span class="arrow" aria-hidden="true">→</span>' : '';
+      const isActive = activePathId === step.id;
+      const inner = isActive
+        ? `<span class="path-trail-current" aria-current="page">${escapeHtml(step.label)}</span>`
+        : `<a href="${step.href}" class="path-trail-link">${escapeHtml(step.label)}</a>`;
+      return `${arrow}${inner}`;
+    })
+    .join('')}</nav>`;
+}
+
+function renderPathBanner(breadcrumbItems, activePathId = null) {
+  const trail = activePathId ? renderPathTrail(activePathId) : '';
 
   return `
     <div class="path-banner">
@@ -66,7 +89,7 @@ function renderCatalogueSidebar(activeCategory, activeTrack, options = {}) {
       const isActive = path.id === activeCategory;
       const tracks = AIYA_getTracks(path.id);
       const tracksHtml =
-        isActive && tracks.length
+        isActive && tracks.length > 1
           ? `<ul class="sidebar-tracks">
               ${tracks
                 .map((track) => {
@@ -82,7 +105,7 @@ function renderCatalogueSidebar(activeCategory, activeTrack, options = {}) {
           : '';
 
       return `<li class="sidebar-category${isActive ? ' is-active' : ''}">
-        <a href="${trackUrl(path.id, tracks[0]?.id || 'all')}" class="sidebar-category-link">${escapeHtml(path.name)}</a>
+        <a href="${trackUrl(path.id, window.AIYA_getDefaultTrackId(path.id))}" class="sidebar-category-link">${escapeHtml(path.name)}</a>
         ${tracksHtml}
       </li>`;
     })
@@ -96,7 +119,7 @@ function renderCatalogueSidebar(activeCategory, activeTrack, options = {}) {
           <span class="sidebar-terminal-dot sidebar-terminal-dot--close" aria-hidden="true"></span>
           <span class="sidebar-terminal-dot sidebar-terminal-dot--min" aria-hidden="true"></span>
           <span class="sidebar-terminal-dot sidebar-terminal-dot--max" aria-hidden="true"></span>
-          <span class="sidebar-terminal-title mono">Related workshops</span>
+          <span class="sidebar-terminal-title">Related workshops</span>
         </div>
         <div class="sidebar-terminal-body">
           <ul class="sidebar-terminal-list">
@@ -118,34 +141,56 @@ function renderCatalogueSidebar(activeCategory, activeTrack, options = {}) {
 
   return `
     <aside class="catalogue-sidebar" aria-label="Browse classes">
-      <nav>
-        <ul class="sidebar-categories">${categories}</ul>
-      </nav>
-      ${workshopsHtml}
+      <div class="catalogue-sidebar-inner">
+        <nav>
+          <ul class="sidebar-categories">${categories}</ul>
+        </nav>
+        ${workshopsHtml}
+      </div>
     </aside>`;
 }
 
 function workshopCard(session) {
   const title = session.fullName || session.name;
+  const url = workshopUrl(session.slug);
+  const isOpen = session.status === 'open';
+  const ctaHtml = isOpen
+    ? `<a class="magnet workshop-card-cta" href="${url}"><span>More info</span><span>→</span></a>`
+    : `<span class="workshop-card-cta workshop-card-cta--soon" aria-disabled="true"><span>Coming soon</span></span>`;
+  const titleHtml = isOpen
+    ? `<a class="workshop-card-title-link" href="${url}">${escapeHtml(title)}</a>`
+    : `<span class="workshop-card-title-text">${escapeHtml(title)}</span>`;
+  const imageHtml = isOpen
+    ? `<a class="workshop-card-image" href="${url}" aria-label="${escapeHtml(title)}">
+        ${workshopPhotoHtml(session.slug, session.outcome)}
+      </a>`
+    : `<div class="workshop-card-image workshop-card-image--static" aria-hidden="true">
+        ${workshopPhotoHtml(session.slug, session.outcome)}
+      </div>`;
+
   return `
-    <article class="workshop-card rv">
-      <h3 class="workshop-card-title">${escapeHtml(title)}</h3>
-      <div class="workshop-card-image" aria-hidden="true">
-        <span class="mono dim">${escapeHtml(session.outcome)}</span>
-      </div>
+    <article class="workshop-card rv${isOpen ? '' : ' workshop-card--soon'}">
+      <h3 class="workshop-card-title">${titleHtml}</h3>
+      ${imageHtml}
       <p class="workshop-card-desc">${escapeHtml(session.outcome)}</p>
-      <div class="workshop-card-meta">
-        <span class="mono">${escapeHtml(session.price)}</span>
-        <span class="mono dim">${escapeHtml(session.duration)}</span>
-        ${statusPill(session.status)}
-      </div>
-      <a class="magnet workshop-card-cta" href="${workshopUrl(session.slug)}"><span>More info</span><span>→</span></a>
+      ${ctaHtml}
     </article>`;
 }
 
 function renderCategories() {
   const grid = document.getElementById('categoryGrid');
   if (grid) window.AIYA_renderPathCards(grid);
+
+  const banner = document.getElementById('categoriesPathBanner');
+  if (banner) {
+    banner.outerHTML = renderPathBanner(
+      [
+        { href: 'index.html', label: 'Home' },
+        { href: 'classes.html', label: 'Classes', current: true },
+      ],
+      'start',
+    ).replace('class="path-banner"', 'class="path-banner rv"');
+  }
 }
 
 function renderTrack() {
@@ -171,30 +216,50 @@ function renderTrack() {
   }
 
   const tracks = AIYA_getTracks(categoryId);
-  const trackId = getTrackIdFromParams(params) || tracks[0]?.id || 'all';
-  const track = tracks.find((t) => t.id === trackId) || tracks[0];
-  const workshops = AIYA_getWorkshops(categoryId, track?.id);
+  const trackId = getTrackIdFromParams(params) || window.AIYA_getDefaultTrackId(categoryId);
+  const track =
+    trackId === 'all'
+      ? { id: 'all', name: category.name }
+      : tracks.find((t) => t.id === trackId) || { id: 'all', name: category.name };
+  const workshops = AIYA_getWorkshops(categoryId, track.id);
   const trackIntro = AIYA_getTrackIntro(categoryId, track?.id);
-  const categoryIntro = AIYA_getCategoryIntro(categoryId);
+
+  const introHtml =
+    categoryId === 'build-sessions' && track?.id && track.id !== 'all'
+      ? `<p>${escapeHtml(trackIntro)}</p>`
+      : window.AIYA_getCategoryIntroHtml(categoryId);
 
   const mobileTracksNav =
-    tracks.length > 1
+    categoryId === 'build-sessions' && tracks.length > 1
       ? `<nav class="mobile-tracks-nav" aria-label="Browse tracks">
+          <a href="${trackUrl(categoryId, 'all')}" class="${track.id === 'all' ? 'is-active' : ''}">All workshops</a>
           ${tracks
             .map(
               (t) =>
-                `<a href="${trackUrl(categoryId, t.id)}" class="${t.id === track?.id ? 'is-active' : ''}">${t.emoji ? `${t.emoji} ` : ''}${escapeHtml(t.name.replace(' Track', ''))}</a>`,
+                `<a href="${trackUrl(categoryId, t.id)}" class="${t.id === track.id ? 'is-active' : ''}">${t.emoji ? `${t.emoji} ` : ''}${escapeHtml(t.name.replace(' Track', ''))}</a>`,
             )
             .join('')}
         </nav>`
-      : '';
+      : tracks.length > 1
+        ? `<nav class="mobile-tracks-nav" aria-label="Browse tracks">
+          ${tracks
+            .map(
+              (t) =>
+                `<a href="${trackUrl(categoryId, t.id)}" class="${t.id === track.id ? 'is-active' : ''}">${t.emoji ? `${t.emoji} ` : ''}${escapeHtml(t.name.replace(' Track', ''))}</a>`,
+            )
+            .join('')}
+        </nav>`
+        : '';
 
-  document.title = `${track?.name || category.name} — AIYA✦ Classes`;
+  const categoryLabel = window.AIYA_getCategoryPageTitle(categoryId);
+  const pageTitle = track.id === 'all' ? categoryLabel : track.name;
+
+  document.title = `${pageTitle} — AIYA✦ Classes`;
 
   const breadcrumbItems = [
     { href: 'index.html', label: 'Home' },
     { href: 'classes.html', label: 'Classes' },
-    { href: trackUrl(categoryId, 'all'), label: category.name },
+    { href: trackUrl(categoryId, 'all'), label: categoryLabel },
   ];
   if (track && track.id !== 'all') {
     breadcrumbItems.push({ href: trackUrl(categoryId, track.id), label: track.name, current: true });
@@ -203,24 +268,20 @@ function renderTrack() {
   }
 
   root.innerHTML = `
-    ${renderPathBanner(breadcrumbItems)}
+    ${renderPathBanner(breadcrumbItems, categoryId)}
     <div class="track-layout-inner">
-      ${renderCatalogueSidebar(categoryId, track?.id)}
+      ${renderCatalogueSidebar(categoryId, track.id === 'all' ? null : track.id)}
       <div class="track-main">
         <header class="track-hero">
-          <h1>${escapeHtml(track?.name || category.name)}</h1>
-          <p class="track-intro">${escapeHtml(track?.id === 'all' ? categoryIntro : trackIntro || categoryIntro)}</p>
-          <div class="track-meta mono dim">
-            ${escapeHtml(category.format)} · ${escapeHtml(category.duration)} · ${escapeHtml(category.price)}
-          </div>
+          <h1>${escapeHtml(pageTitle)}</h1>
+          <div class="track-intro${categoryId === 'discover' ? ' track-intro--discover' : ''}">${introHtml}</div>
         </header>
 
         ${mobileTracksNav}
 
-        <section class="workshops-section" aria-labelledby="workshops-heading">
-          <h2 id="workshops-heading" class="workshops-heading">Workshops</h2>
+        <section class="workshops-section" aria-label="Workshops">
           <div class="workshop-grid" id="workshopGrid">
-            ${workshops.map((w) => workshopCard(categoryId === 'build-sessions' ? { ...w, fullName: w.fullName } : w)).join('')}
+            ${workshops.map((w) => workshopCard(w)).join('')}
           </div>
         </section>
       </div>
@@ -260,12 +321,14 @@ function renderWorkshop() {
   const trackId = session.trackId || 'all';
   const sidebarWorkshops = AIYA_getWorkshops(categoryId, trackId);
 
+  const categoryLabel = window.AIYA_getCategoryPageTitle(categoryId) || session.categoryName;
+
   document.title = `${title} — AIYA✦ Classes`;
 
   const breadcrumbItems = [
     { href: 'index.html', label: 'Home' },
     { href: 'classes.html', label: 'Classes' },
-    { href: trackUrl(categoryId, trackId), label: session.categoryName },
+    { href: trackUrl(categoryId, trackId), label: categoryLabel },
   ];
   if (session.trackName) {
     breadcrumbItems.push({ href: trackUrl(categoryId, trackId), label: session.trackName });
@@ -314,40 +377,40 @@ function renderWorkshop() {
   }
 
   root.innerHTML = `
-    ${renderPathBanner(breadcrumbItems)}
+    ${renderPathBanner(breadcrumbItems, categoryId)}
     <div class="track-layout-inner">
       ${renderCatalogueSidebar(categoryId, trackId, {
         showWorkshops: true,
-        workshops: sidebarWorkshops.map((w) =>
-          categoryId === 'build-sessions' ? { ...w, fullName: w.fullName } : w,
-        ),
+        workshops: sidebarWorkshops.map((w) => w),
         activeSlug: slug,
       })}
       <div class="track-main">
         <header class="session-hero">
           <h1>${escapeHtml(title)}</h1>
-          <a class="magnet session-cta" href="${ctaHref}"><span>${ctaLabel}</span><span>→</span></a>
-          <div class="session-meta-row">
-            <div class="session-meta-item">
-              <span class="label">Format</span>
-              <span class="value">${escapeHtml(session.format)}</span>
+          <div class="session-meta-bar">
+            <div class="session-meta-row">
+              <div class="session-meta-item">
+                <span class="label">Format</span>
+                <span class="value">${escapeHtml(session.format)}</span>
+              </div>
+              ${
+                session.status === 'open'
+                  ? `<div class="session-meta-item">
+                <span class="label">Price</span>
+                <span class="value">${escapeHtml(session.price)}</span>
+              </div>`
+                  : ''
+              }
+              <div class="session-meta-item">
+                <span class="label">Level</span>
+                <span class="value">${escapeHtml(session.level)}</span>
+              </div>
+              <div class="session-meta-item">
+                <span class="label">Status</span>
+                <span class="value">${statusPill(session.status)}</span>
+              </div>
             </div>
-            <div class="session-meta-item">
-              <span class="label">Duration</span>
-              <span class="value">${escapeHtml(session.duration)}</span>
-            </div>
-            <div class="session-meta-item">
-              <span class="label">Price</span>
-              <span class="value">${escapeHtml(session.price)}</span>
-            </div>
-            <div class="session-meta-item">
-              <span class="label">Level</span>
-              <span class="value">${escapeHtml(session.level)}</span>
-            </div>
-            <div class="session-meta-item">
-              <span class="label">Status</span>
-              <span class="value">${statusPill(session.status)}</span>
-            </div>
+            ${sessionCtaHtml(ctaLabel, ctaHref)}
           </div>
         </header>
 
@@ -356,8 +419,10 @@ function renderWorkshop() {
           <ul class="build-outcomes">
             ${session.outcomes.map((o) => `<li>${escapeHtml(o)}</li>`).join('')}
           </ul>
-          <div class="build-image" aria-hidden="true">
-            <div class="build-image-inner">${escapeHtml(session.outcome)}</div>
+          <div class="build-image">
+            ${window.AIYA_getWorkshopPhoto?.(slug)
+              ? `<img src="${escapeHtml(window.AIYA_getWorkshopPhoto(slug))}" alt="${escapeHtml(window.AIYA_getWorkshopPhotoAlt(slug))}" loading="lazy" decoding="async" />`
+              : `<div class="build-image-inner" aria-hidden="true">${escapeHtml(session.outcome)}</div>`}
           </div>
         </section>
 
@@ -368,6 +433,10 @@ function renderWorkshop() {
 
         ${progressionHtml}
         ${upNextHtml}
+
+        <section class="session-cta-bottom rv">
+          ${sessionCtaHtml(ctaLabel, ctaHref)}
+        </section>
       </div>
     </div>`;
 }

@@ -272,6 +272,129 @@ document.querySelectorAll('main .rv').forEach((el) => {
   });
 });
 
+/* ---------------- draggable 3D "Why a classroom?" heading ---------------- */
+(function initTitle3D() {
+  const stage = document.querySelector('[data-t3d]');
+  if (!stage) return;
+  const rot = stage.querySelector('.t3d-rot');
+  const front = rot.querySelector('.sec-title');
+  if (reduceMotion) {
+    stage.classList.add('t3d-static');
+    return;
+  }
+
+  // Extrude: stack slightly-offset copies behind the real heading
+  const LAYERS = 14;
+  const DEPTH = 1.5; // px between layers
+  for (let i = LAYERS; i >= 1; i--) {
+    const layer = front.cloneNode(true);
+    layer.classList.add('t3d-layer');
+    layer.setAttribute('aria-hidden', 'true');
+    layer.style.transform = `translateZ(${-i * DEPTH}px)`;
+    rot.insertBefore(layer, front);
+  }
+
+  const REST = { x: 6, y: -14 };
+  const AUTO_SPEED = 12; // deg per second — one full turn every 30s
+  const state = { x: REST.x, y: REST.y };
+  let vx = 0;
+  let vy = 0;
+  let dragging = false;
+  let resetting = false;
+  let visible = false;
+  let lastX = 0;
+  let lastY = 0;
+  let lastT = 0;
+  let loopId = null;
+
+  const apply = () => {
+    rot.style.transform = `rotateX(${state.x}deg) rotateY(${state.y}deg)`;
+  };
+  apply();
+
+  // One loop: drag momentum decays, then it settles into a slow auto-spin
+  // and eases its tilt back to the resting angle.
+  function tick(t) {
+    const dt = lastT ? Math.min((t - lastT) / 1000, 0.05) : 0;
+    lastT = t;
+    if (!dragging && !resetting) {
+      if (Math.abs(vx) + Math.abs(vy) > 0.02) {
+        vx *= 0.94;
+        vy *= 0.94;
+        state.x += vx;
+        state.y += vy;
+      } else {
+        vx = vy = 0;
+        state.y += AUTO_SPEED * dt;
+        state.x += (REST.x - state.x) * Math.min(1, dt * 1.5);
+      }
+      apply();
+    }
+    loopId = visible ? requestAnimationFrame(tick) : null;
+  }
+
+  // Only animate while the heading is on screen
+  new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+    if (visible && !loopId) {
+      lastT = 0;
+      loopId = requestAnimationFrame(tick);
+    }
+  }).observe(stage);
+
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    gsap.killTweensOf(state);
+    resetting = false;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    vx = vy = 0;
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.add('is-dragging', 'has-spun');
+  });
+
+  stage.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    vy = dx * 0.45;
+    // Touch only spins sideways so vertical swipes keep scrolling the page
+    vx = e.pointerType === 'touch' ? 0 : -dy * 0.45;
+    state.x += vx;
+    state.y += vy;
+    apply();
+  });
+
+  const release = () => {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove('is-dragging');
+  };
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', release);
+
+  stage.addEventListener('dblclick', () => {
+    vx = vy = 0;
+    resetting = true;
+    // Unwind to the nearest full turn so it doesn't spin back through every rotation
+    state.x = ((state.x % 360) + 540) % 360 - 180;
+    state.y = ((state.y % 360) + 540) % 360 - 180;
+    gsap.to(state, {
+      x: REST.x,
+      y: REST.y,
+      duration: 0.9,
+      ease: 'power3.out',
+      onUpdate: apply,
+      onComplete: () => {
+        resetting = false;
+      },
+    });
+  });
+})();
+
 /* ---------------- hero parallax out ---------------- */
 gsap.to('#hero .hero-title', {
   yPercent: -18,
